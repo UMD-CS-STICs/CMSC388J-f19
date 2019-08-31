@@ -2,7 +2,6 @@
 
 ![Flask Logo][logo]
 
-
 This course is an introduction to building secure, full-stack web applications with Python and Flask.
 We'll start with Python and Flask and transition to web application security, where we'll look at
 different types of security vulnerabilities and best practices to patch up these vulnerabilities in your own apps.
@@ -178,4 +177,4 @@ forget to provide your feedback using the campus-wide CourseEvalUM system. Your
 comments will help make this class better.
 
 
-[logo]: http://flask.pocoo.org/static/logo/flask.png
+[logo]: https://flask.palletsprojects.com/en/1.1.x/_images/flask-logo.png
