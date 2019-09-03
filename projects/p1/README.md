@@ -113,6 +113,10 @@ The `-q` flag reduces the amount of space pytest takes in the terminal when it p
 
 ## Submission & Grading
 
+Make sure that you've run the testing file, as explained above, and that you've passed all
+the tests. If you need help, come to office hours or contact us on Piazza for the quickest 
+feedback. The submit server will not show test results, but just display "ACCEPTED".
+
 Submit the `practice.py` file to the submit server. No other files are required. All your work
 must be in the `practice.py` file.
 
