@@ -20,7 +20,7 @@ can deploy your web app!
 - **Textbook**: No textbook, all materials are provided and documentation is online
 - **Course Facilitators**: Kenton Wong, Yashas Lokesh
 - **Faculty Advisor**: Michael Marsh
-- **Syllabus last updated**: August 13, 2019
+- **Syllabus last updated**: September 10, 2019
 - **Previously offered**: N/A
 
 ## Topics Covered
@@ -65,14 +65,14 @@ can deploy your web app!
 | Week | Topic                                    | Assignment                                    |
 | ---- | ---------------------------------------- | --------------------------------------------- |
 | 1    | Intro to Python                          | Python practice (P1) assigned                 |
-| 2    | Flask Intro                              | P1 due, P2 assigned                           |
-| 3    | Intro to Web App Security                |                                               |
-| 4    | Databases, Injection attacks             | P2 due, P3 assigned                           |
-| 5    | Forms, CSRF                              |                                               |
-| 6    | User Management                          | P3 due, P4 assigned                           |
-| 7    | Cookies, MITM, Security Headers, Signals |                                         |
-| 8    | Blueprints                               | P4 due
-| 9    | Testing                                  | 
+| 2    | Flask Intro                              | P1 due                           |
+| 3    | Intro to Web App Security                | P2 assigned                                  |
+| 4    | Databases, Injection attacks             |                            |
+| 5    | Forms, CSRF                              | P2 due, P3 assigned                          |
+| 6    | User Management                          |                            |
+| 7    | Cookies, MITM, Security Headers, Signals | P3 due, P4 assigned                          |
+| 8    | Blueprints                               | 
+| 9    | Testing                                  | P4 due
 | 10   | Midterm                                  |                                               |
 | 11   | Two-Factor Authentication                | Final Project assigned                        |
 | 12   | Useful Python packages                   |                                               |
