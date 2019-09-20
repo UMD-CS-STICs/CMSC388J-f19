@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>User Info</h1>
+
+<form method="post">
+    <input type="text" name="Username"> <br>
+    <!-- <input type="text"> -->
+    <input type="submit" name="All" value="See all users">
+    <input type="submit" value="Submit">
+    
+</form>
+<br>
+
+<b>User : Bio </b>
+<ul>
+{% for info in user_info %}
+    <li>{{ info[0] }} : {{ info[1] }}</li>
+{% endfor %}
+</ul>
+
+<a href={{ url_for('about') }}>About this Website</a>
+<a href= {{ url_for('feed') }}>Go to Feed</a>
+{% endblock %}

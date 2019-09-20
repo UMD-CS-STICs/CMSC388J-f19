@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Welcome to the website!</h1>
+<a href={{ url_for('about') }}>About this Website</a> <br>
+<a href={{ url_for('user_info') }}>User Info Page</a> <br>
+<a href= {{ url_for('feed') }}>Go to Feed</a>
+{% endblock %}
