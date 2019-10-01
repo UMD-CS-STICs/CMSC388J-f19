@@ -14,7 +14,7 @@
 <b>User : Bio </b>
 <ul>
 {% for info in user_info %}
-    <li>{{ info[0] }} : {{ info[1] }}</li>
+    <li>{{ info.name }}: {{ info.bio }}</li>
 {% endfor %}
 </ul>
 

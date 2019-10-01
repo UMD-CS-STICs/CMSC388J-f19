@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+{% if message %}
+    <h1>{{ message }}</h1>
+{% else %}
+    <h1>Welcome to the website!</h1>
+{% endif %}
+<form action="/" method="post">
+    {{ form.csrf_token }}
+    {{ form.name.label }}: {{ form.name(size=40) }} <br>
+    {{ form.location.label }}: {{ form.location(size=60) }} <br>
+    {{ form.age.label }}: {{ form.age(size=10) }} <br>
+    <input type="submit" value="Enter">
+</form>
+<br>
+<a href= {{ url_for('about') }}>About page</a>
+{% endblock %}
