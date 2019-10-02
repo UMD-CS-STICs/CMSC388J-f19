@@ -1,10 +1,10 @@
 # P2: First Flask App - Poke-Info
 
-**Assigned**: Week 4, September 30th
+**Assigned**: Week 4, October 1st
 
-**Due**: Week 6, October 14th, 2019, 11:59 PM
+**Due**: Week 6, October 16th, 2019, 11:59 PM
 
-**Late Deadline**: One day after due date, for 10% off: October 14th, 2019, 11:59 PM
+**Late Deadline**: One day after due date, for 10% off: October 17th, 2019, 11:59 PM
 
 ## Description
 
