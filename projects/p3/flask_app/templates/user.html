@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>{ User }'s page</h1> <!-- Should be changed -->  
+<div>
+    <div>
+        Email: { Email } <!-- Should be changed -->  
+    </div>
+    <div>
+        Posts written: { Number of Posts written }  <!-- Should be changed -->  
+    </div>
+</div>
+{% for post in posts %}
+    <article>
+        <div>
+           <!-- List all of the blog posts written by the user -->
+           <!-- Should be changed -->  
+        </div>
+    </article>
+{% endblock %}

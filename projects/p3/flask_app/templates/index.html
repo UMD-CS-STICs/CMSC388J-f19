@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Welcome to my blog!</h1>
+{% for post in posts %}
+<article>
+    <div>
+        <div>
+            <!-- Post author and date of publication -->
+            <a href="">{ Post Author }</a> <br> <!-- Should be changed --> 
+            Published: { Post Date } <!-- Should be changed --> 
+        </div>
+        <!-- The name of the blog post, and then the blog content -->
+        <h2><a href=""> { Post Title }</a></h2> <!-- Should be changed --> 
+        <p>{ Post Shortened Content }</p> <!-- Should be changed --> 
+    </div>
+</article>
+{% endfor %}
+<div>
+    Submit a new blog post!
+    <form action="" method="post">
+        <!-- Should be changed --> 
+    </form>
+</div>
+{% endblock %}

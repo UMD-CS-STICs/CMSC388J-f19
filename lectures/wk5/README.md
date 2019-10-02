@@ -225,10 +225,10 @@ for your reference.
 ### More SQLAlchemy
 
 We'll go over another feature of `SQLAlchemy` that allows us to define relationships
-between our tables. Recall that we created a `Users` table in our database this way:
+between our tables. Recall that we created a `User` table in our database this way:
 
 ```python
-class Users(db.Model):
+class User(db.Model):
     
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=False)
@@ -241,19 +241,22 @@ class Users(db.Model):
 ```
 
 We specified the name and type of each column in our database, and created a 
-representation for a record in `Users`. We might have a need to keep track of
+representation for a record in `User`. We might have a need to keep track of
 comments on our website, in which case we might create a table called `Comments`.
 A comment has some text, a date and time for when it was created, and
 the author of the comment. 
 
-The author of any comment is also a user, and so would be recorded in the `Users`
+The author of any comment is also a user, and so would be recorded in the `User`
 table. We could just use a string to keep track of a user's name and then search
-the `Users` table for that specific user, and get information, or we can define a
+the `Uses` table for that specific user, and get information, or we can define a
 relationship between the two tables. Since one user can have multiple comments on a website,
 we'll be defining a one-to-many relationship between database tables here.
 
 ```python
-class Users(db.Model):
+from flask_app import db
+from datetime import datetime
+
+class User(db.Model):
     
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=False)
@@ -270,27 +273,122 @@ class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.String(300), nullable=False)
     date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    writer_email = db.Column(db.Integer, db.ForeignKey('user.email'), nullable=False)
 
     def __repr__(self):
-        return 'Comment id: %s by User id: %s' % (self.id, self.user_id)
+        return 'Comment id: %s by User with email: %s' % (self.id, self.writer_email)
 ```
 
 In `Users`, we declared a new property called `user` for the `Comment` class, so
 the `user` for a certain comment can be accessed with `comment.user`. The keyword
 argument `backref` creates this new property. The first argument specifies which `Model`
-class to add the property to. We also specify `lazy` to be `True` so that data
+class to add the property to. We identify `Address` by a string because
+it hasn't been created yet in the file.
+
+We also specify `lazy` to be `True` so that data
 is loaded only when requested, not when the parent is also called for data.
 
 In `Comment`, we create a new column of integers whose value is the `id` of a `user`.
 This allows us to associate every record in the `Comment` table with a `user`.
+
+
+How do we use these models? We'll try it out in the Python REPL:
+
+```python
+>>> from flask_app import *
+>>>
+>>> db.create_all()
+>>>
+>>> harry = Users(name='Harry Potter', bio='I am a wizard, Voldemort tried to kill me!', email='harry@hogw.edu', location='Scotland')
+>>> db.session.add(harry)
+>>> db.session.commit()
+>>>
+>>> Users.query.all()
+[User: Harry Potter]
+>>>
+>>> comment = Comment(text='First time on here, great site!', user=harry)
+>>>
+>>> db.session.add(comment)
+>>> db.session.commit()
+>>>
+>>> Comment.query.all()
+[Comment id: 1 by User with email: harry@hogw.edu]
+```
+
+When trying to retrieve values from our database, we call get the attribute
+`query` from a `Model` subclass, and then we can apply filters and then call
+`all()` or `first()` on the query to retrieve values.
+
+Now let's see how to easily add multiple values and more examples of how to
+query records:
+
+```python
+>>> yashas = User(name='Yashas', bio="I'm an Indian CS+Math student", email='yashloke@umd.edu', location='USA')
+>>> kenton = User(name='Kenton', bio="I'm Kenton, a CS student", email='kdubbs0@umd.edu', location='USA')
+>>> armin = User(name='Armin', bio="The creator of Werkzeug and Flask", email='armin.ronacher@active-4.com', location='Austria')
+>>> knuth = User(name='Donald', bio="I wrote the classic algorithms series of books, the Art of Computer Programming", email='N/A', location='California')
+>>>
+>>> db.session.add_all([yashas, kenton, armin, knuth])
+>>> db.session.commit()
+>>>
+>>> User.query.filter_by(location='USA').all()
+[User: Yashas, User: Kenton]
+>>> User.query.filter_by(location='USA').first()
+User: Yashas
+>>> User.query.first()
+User: Harry Potter
+>>> User.query.filter_by(location='Canada').all()
+[]
+```
+
+We create 4 instances of the `User` class and fill out all of the necessary
+properties. Since we specified that an email cannot be `null` in the class definition,
+we put a placeholder "N/A" string for `knuth`'s email. Then we add all of the instances
+of `User` to our database session, and commit the changes. 
+
+We can query our `User` table by the location of each user, and then all of the results, 
+or just the first result as shown above. You can use any property of your `Model` in 
+order to filter results from the database query. 
+
+We defined a relationship between `User` and `Comment` using the `db.relationship()`
+in `models.py`. We can check if this relationship actually exists in the database, and
+how we can use it:
+
+```python
+>>> c = Comment.query.first()
+>>> c
+Comment id: 1 by User with email: harry@hogw.edu
+>>> c.writer_email
+'harry@hogw.edu'
+>>> c.user.id
+1
+>>> c.user.comments
+[Comment id: 1 by User with email: harry@hogw.edu]
+```
+
+And finally, to delete any record from a database, we can just use the 
+`delete()` method instead of the `add()` method.
+
+```python
+>>> User.query.all()
+[User: Harry Potter, User: Yashas, User: Kenton, User: Armin, User: Donald]
+>>> u = User.query.filter_by(name='Yashas').first()
+>>>
+>>> db.session.delete(u)
+>>> db.session.commit()
+>>>
+>>> User.query.all()
+[User: Harry Potter, User: Kenton, User: Armin, User: Donald]
+```
+
+We grabbed the user with name `'Yashas'` by using the `filter_by().first()` sequence of calls, 
+then we just delete him from our database and commit the changes.
 
 ### Conclusion
 
 In this lecture we showed how to work with `Flask-WTF`, what sessions are
 and how to use them, and a little bit more about `SQLAlchemy`. Next week,
 we'll get more into user management and how to secure your website for logins.
-
 
 
 [expired]: ./images/expired.jpeg "Expired Session image"
