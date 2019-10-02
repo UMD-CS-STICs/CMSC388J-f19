@@ -1,4 +1,4 @@
-# P2: First Flask App - Poke-Info
+# P3: Open Blogging App
 
 **Assigned**: Week 4, October 1st
 
