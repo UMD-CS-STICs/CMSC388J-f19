@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<div>
+{% for post in posts %}
+<article>
+    <div>
+        <div>
+            <a href="">{{ post.user }}</a> <br> <!-- Should be changed --> 
+            Location: {{ post.location }} <!-- Should be changed --> 
+        </div>
+        <!-- The name of the blog post, and then the blog content -->
+        <p>{{ post.text }}</p> <!-- Should be changed --> 
+        <b>Likes:</b> {{ post.likes }}
+    </div>
+</article>
+{% endfor %}
+</div>
+
+<div>
+    <a href={{ url_for('register') }}>Register!</a> or <a href={{ url_for('login') }}>Login!</a>
+</div>
+
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div>
+    Registration!
+    <form action="" method="post">
+        {{ form.csrf_token }}
+        <div>
+            {{ form.username.label }}
+
+            {{ form.username }}
+        </div>
+        <div>
+            {{ form.email.label }}
+
+            {{ form.email }}
+        </div>
+        <div>
+            {{ form.password.label }}
+
+            {{ form.password }}
+        </div>
+        <div>
+            {{ form.confirm.label }}
+
+            {{ form.confirm }}
+        </div>
+        <div>
+            {{ form.submit }}
+        </div>
+    </form>
+</div>
+<div>
+        {% with flashed_msgs = get_flashed_messages() %}
+            {% if flashed_msgs %}
+                <ol>
+                {% for msg in flashed_msgs %}
+                    <li>{{ msg }}</li>
+                {% endfor %}
+                </ol>
+            {% endif %}
+        {% endwith %}
+        </div>
+
+{% endblock %}

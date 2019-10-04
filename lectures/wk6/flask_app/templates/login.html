@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div>
+    Registration!
+    <form action="" method="post">
+        {{ form.csrf_token }}
+        <div>
+            {{ form.username.label }}
+
+            {{ form.username }}
+        </div>
+        <div>
+            {{ form.password.label }}
+
+            {{ form.password }}
+        </div>
+        <div>
+            {{ form.submit }}
+        </div>
+    </form>
+</div>
+
+{% endblock %}
