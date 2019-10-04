@@ -8,7 +8,7 @@ def datetime_to_str(dt_obj):
     >>> from datetime import datetime
     >>> now = datetime.now()
     >>> now.strftime('%B %d, %Y)
-    'September 30, 2019
+    'September 30, 2019'
     """
     date_format = '%B %d, %Y'
 
