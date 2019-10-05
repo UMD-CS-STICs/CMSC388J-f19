@@ -12,4 +12,4 @@ def datetime_to_str(dt_obj):
     """
     date_format = '%B %d, %Y'
 
-    return dt_obj.strftime(format_spec)
+    return dt_obj.strftime(date_format)
