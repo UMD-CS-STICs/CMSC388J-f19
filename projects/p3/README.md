@@ -96,7 +96,7 @@ to have in your database. All of the parameters are **non-nullable**.
 
 `User`:
 - `Name` - text string
-- `Email` - text string - should be validated with a WTForms validator
+- `Email` - text string - should be validated with a WTForms validator, must be **unique**
   - (Hint: look at the WTForms validators list)
 - **Relationship to** `Post` - each user has at least 1 post
 
