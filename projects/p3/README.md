@@ -33,7 +33,7 @@ has all of the formatting taken care of. `post.html` also has all of the formatt
 taken care of, you just have to replace the placeholder values
 with actual values.
 
-`list.html` does not have the formatting finished. All of the blog posts
+`user.html` does not have the formatting finished. All of the blog posts
 created by a certain user should be listed there. Format it the
 same way as `index.html` is formatted for listing all of the posts.
 
@@ -60,8 +60,12 @@ In `routes.py`, you're required to implement three functions:
 
 2. `profile()` - Shows the user's details and a list of all of the blog posts written by the user
    
-   Routed at: `/user/<name>`
+   Routed at: `/<name>_<int:user_id>`
    Methods: [`GET`]
+
+   **Update:** The `user_id` parameter was added. This is to differentiate users who might
+   have the same name. Sorry for missing this the first time. The `int:` just specifies that
+   `user_id` should be an integer.
 
    Display the user's name, email, the number of posts written, and a list of all
    the blog posts written by the user.
@@ -95,12 +99,14 @@ Here, we'll specify the schema of each of the three tables you'll be required
 to have in your database. All of the parameters are **non-nullable**.
 
 `User`:
+- `id` - integer, primary key
 - `Name` - text string
 - `Email` - text string - should be validated with a WTForms validator, must be **unique**
   - (Hint: look at the WTForms validators list)
 - **Relationship to** `Post` - each user has at least 1 post
 
 `Post`:
+- `id` - integer, primary key
 - `Title` - text string
 - `Author` - text string
 - `Date` - datetime object - default value is time of creation
@@ -109,6 +115,7 @@ to have in your database. All of the parameters are **non-nullable**.
 - **Relationship to** `Comment` - each post has at least 0 comments
 
 `Comment`:
+- `id` - integer, primary key
 - `Author` - text string
 - `Date` - datetime object - default value is time of creation
 - `Content` - text string
