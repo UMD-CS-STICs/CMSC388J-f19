@@ -111,7 +111,7 @@ to have in your database. All of the parameters are **non-nullable**.
 - `Author` - text string
 - `Date` - datetime object - default value is time of creation
 - `Content` - text string
-- **Relationship to** `Post` - each post belonds to a single user
+- **Relationship to** `User` - each post belonds to a single user
 - **Relationship to** `Comment` - each post has at least 0 comments
 
 `Comment`:
