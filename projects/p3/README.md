@@ -121,6 +121,28 @@ to have in your database. All of the parameters are **non-nullable**.
 - `Content` - text string
 - **Relationship to** `Post` - each comment belongs to a single post
 
+**Forms:**
+
+`New Post` Form, on `/`:
+- `Name`
+- `Email`
+- `Content`
+
+**Clarifications:** Only the email needs to be unique, that is the constraint
+we'll use to distinguish different users.
+
+If a request is made with an email that **already exists** in the database, but
+with a different name than the one associated with that email, you should disregard
+this `POST` request. You can print out an error message for debugging purposes
+if you wish, we will only be checking that the database is not updated.
+  
+`New Comment` Form, on `/posts/<post_title>`:
+- `Name`
+- `Content`
+
+**Clarifications:** There are no restrictions on who can comment, so you don't
+have to check for anything here. The `name` is not associated with a user.
+
 Use the examples from the lecture notes if you get confused on how to create 
 these tables.
 
@@ -166,11 +188,11 @@ Your project will be graded as follows:
 - 15 pts - 5 pts for each correctly created `Model`
 - 5 pts - Secret key created and set
 - 5 pts - All required details for blog posts are visible on index page, and content synopsis
-          is limited to 250 characters
+          is limited to 250 characters, and link to index page at `/` exists.
 - 5 pts - All required details for blog posts are visible on user page, and content synopsis is
-          limited to 250 characters if longer.
+          limited to 250 characters, and link to index page at `/` exists
 - 5 pts - All required details for comments and the current post are visible on post detail page.
-- 5 pts - Redirects after a post request to avoid the "resend data again?" prompt
+- 5 pts - Redirects after a post requests to avoid the "resend data again?" prompt
 - 5 pts - Dates formatted similarly to `September 01, 2019`.
 - 5 pts - `__repr__` method implemented for each `Model`
 
