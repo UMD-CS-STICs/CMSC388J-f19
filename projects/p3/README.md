@@ -137,8 +137,8 @@ this `POST` request. You can print out an error message for debugging purposes
 if you wish, we will only be checking that the database is not updated.
 
 If a request is made with a name that already exists in the database, but
-with a different email, this request should still go through and create a new user,
-since we are differentiating users by their email.
+with a different email that does not exist in the database, this request 
+should still go through and create a new user, since we are differentiating users by their email.
   
 `New Comment` Form, on `/posts/<post_title>`:
 - `Name`
