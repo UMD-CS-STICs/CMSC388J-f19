@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
     <div>
-        <a href={{ url_for('logout' )}}>Log Out</a>
+        <a href={{ url_for('users.logout' )}}>Log Out</a>
     </div>
     <div>
         <h2>{{ current_user.username }}</h2>

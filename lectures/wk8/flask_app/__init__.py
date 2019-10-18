@@ -14,11 +14,17 @@ talisman = Talisman(app)
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
-login_manager.login_view = 'login'
+login_manager.login_view = 'users.login'
 
 from flask_app import models
 
 db.create_all()
 
-from flask_app import routes
+# from flask_app import routes
+
+from flask_app.main.routes import main
+from flask_app.users.routes import users
+
+app.register_blueprint(main)
+app.register_blueprint(users)
 
