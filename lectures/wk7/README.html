@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Week 7</title>
+        
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+        
+        <style>
+.task-list-item { list-style-type: none; } .task-list-item-checkbox { margin-left: -20px; vertical-align: middle; }
+</style>
+        <style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        
+        
+    </head>
+    <body class="vscode-light">
+        <h1 id="week-7">Week 7</h1>
+<h3 id="flask-talisman">Flask Talisman</h3>
+<p>This week we'll be looking at a very minimal <code>Flask</code> application. It has only
+a <code>Index</code> and <code>About</code> page, and only the <code>flask_talisman</code> extension configured.
+<code>flask_talisman</code> is a small extension, implemented in just 334 (significant) lines
+of code. It allows us to more easily set security headers.</p>
+<p>Most of the content for this week is in the slides which are linked on Piazza.</p>
+<p>In <code>__init__.py</code>, we add an import statement for <code>flask_talisman</code> at the top of the file</p>
+<p><code>__init__.py</code>:</p>
+<pre><code class="language-py"><div><span class="hljs-keyword">from</span> flask <span class="hljs-keyword">import</span> Flask
+<span class="hljs-keyword">from</span> flask_talisman <span class="hljs-keyword">import</span> Talisman
+</div></code></pre>
+<p>We setup the configuration of the <code>app</code> object the normal way. We don't have to
+configure a secret key in this case because <code>flask_talisman</code> does not require it
+to work. Remember that if you are using <code>WTForms</code>, you will need to set the
+secret key or the CSRF tokens will not be generated, and you'll simply
+get an error when the website is run.</p>
+<p>There are several security headers we discussed in the slides, and by default,
+<code>flask_talisman</code> sets all of them. Simply adding the line <code>Talisman(app)</code>
+to <code>__init__.py</code> enables the following:</p>
+<p><strong>Note:</strong> We'll be looking at the <code>Content-Security-Policy</code> (CSP) header in detail
+further down.</p>
+<ul>
+<li>All connects to be through HTTPS (except localhost)</li>
+<li><code>Flask</code> session cookie set to <code>secure</code>, so it can only be sent with an HTTPS request
+<ul>
+<li>Still <strong>do not</strong> add sensitive information to the cookie</li>
+</ul>
+</li>
+<li>Sets the session cookie be <code>httponly</code>, disallowing the JavaScript <code>Document.cookie</code> API from
+accessing your cookie. This helps mitigate XSS attacks.</li>
+<li>Sets <code>X-Frame-Options</code> to <code>'SAMEORIGIN'</code> to prevent clickjacking, which is where
+an external website can embed your webpage in an <code>iframe</code> HTML tag, and then trick
+you into clicking on things you didn't mean to click on.
+When set to <code>'SAMEORIGIN'</code>, only frames embedding the same page they are on are allowed.</li>
+<li>Sets <code>X-XSS-Protection</code>. Not really needed if a strong CSP is employed.</li>
+<li>Sets <code>X-Content-Type-Options</code>, to enforce media types to be obeyed, and prevent non-executable
+types from being turned into executable ones.</li>
+<li>Sets <code>X-Download-Options</code> to tell browser to not allow opening a downloaded file
+in the browser, only really useful for <strong>Internet Explorer</strong>.</li>
+<li>Sets <code>Content-Security-Policy</code> to <code>default-src: 'self'</code>, meaning we only allow loading content
+from sources with the same host, port, and protocol. This is rather restrictive;
+what if we want to embed a YouTube video or retrieve audio files we might have stored on a
+different database? We'll go over how to set your own policies below.</li>
+<li>Sets the <code>Referrer-Policy</code> to <code>strict-origin-when-cross-origin</code>, meaning we send no
+header with a reference back to our website if we are navigating, through a link, to
+a less secure website.</li>
+</ul>
+<p>You <strong>do not</strong> need to know the specifics of what all these headers do. You <em>should know</em>
+how web app attacks work and how to protect against them, and <code>flask_talisman</code> helps
+us with protecting our app.</p>
+<p>To enable <code>flask_talisman</code>, we simply add it to our <code>__init__.py</code> like so:</p>
+<p><code>__init__.py</code>:</p>
+<pre><code class="language-py"><div><span class="hljs-keyword">from</span> flask <span class="hljs-keyword">import</span> Flask
+<span class="hljs-keyword">from</span> flask_talisman <span class="hljs-keyword">import</span> Talisman
+
+app = Flask(__name__)
+Talisman(app)
+</div></code></pre>
+<p>By default, the <code>Content-Security-Policy</code> is set to <code>default-src: 'self'</code>, which just
+means that we only allow loading resources from sources that have the same host, same port,
+and same protocol (HTTP vs. HTTPS).
+This is restrictive, but ensures that the client does not load any malicious code.</p>
+<p><strong>Note:</strong> <code>'self'</code> excludes subdomains of your site.</p>
+<p>We can make this explicit with the following code. We define our policy using a dictionary,
+and then pass the dictionary as an argument to the <code>content_security_policy=</code> keyword
+parameter of <code>Talisman()</code>.</p>
+<p><strong>Example 1:</strong></p>
+<pre><code class="language-py"><div>csp = {
+    <span class="hljs-string">'default-src'</span>: <span class="hljs-string">'\'self\''</span>
+}
+
+Talisman(app, content_security_policy=csp)
+</div></code></pre>
+<p>Now our site accepts resources only from the same origin. To check that we actually
+have <code>flask_talisman</code> protection enabled, we can use <code>cURL</code> to make a simple <code>GET</code> request
+to the front page of our website. Here are the results:</p>
+<p><img src="file:////Users/lokeshkrishnappa/Developer/stic_courses/CMSC388J-f19/lectures/wk7/images/headers.png" alt="curl output" title="Security Headers Image view"></p>
+<p>From now on, we'll omit the last line and just show the security policy dictionary.</p>
+<p><strong>Example 2:</strong></p>
+<pre><code class="language-py"><div>csp = {
+    <span class="hljs-string">'default-src'</span>: [
+        <span class="hljs-string">'\'self\''</span>,
+        <span class="hljs-string">'*.trusted.com'</span>
+    ]
+}
+</div></code></pre>
+<p>And now our application will only accept resources loaded from the same origin
+or from <code>trusted.com</code> and <code>trusted.com</code>'s subdomains.</p>
+<p><strong>Example 3:</strong></p>
+<pre><code class="language-py"><div>csp = {
+    <span class="hljs-string">'default-src'</span>: <span class="hljs-string">'\'self\''</span>,
+    <span class="hljs-string">'img-src'</span>: <span class="hljs-string">'*'</span>,
+    <span class="hljs-string">'media-src'</span>: [<span class="hljs-string">'media1.com'</span>, <span class="hljs-string">'media2.com'</span>],
+    <span class="hljs-string">'script-src'</span>: <span class="hljs-string">'userscripts.example.com'</span>
+}
+</div></code></pre>
+<p>Here, you allow your users to include images from anywhere in their content.
+Images are distinguished by the <code>img</code> HTML tag. We restrict the sources of
+audio, video, and subtitle files using the <code>'media-src'</code> directive to
+<code>'media1.com'</code>,<code>'media2.com'</code>, and our own site. We don't allow media to be loaded
+from the subdomains of these three hosts. Finally, we only allow scripts from
+<code>'userscripts.example.com'</code> and our own site.</p>
+<p><strong>Example 4:</strong></p>
+<pre><code class="language-py"><div>csp = {
+    <span class="hljs-string">'default-src'</span>: <span class="hljs-string">'https://onlinebanking.jumbobank.com'</span>
+}
+</div></code></pre>
+<p>This policy only allows loading resources over HTTPS from the given source. If you
+want to ensure that all of your content is only loaded using SSL, so that
+no one can eavesdrop on requests that users are making, you would just
+have to add in the <code>https</code> url for your site.</p>
+<p><strong>Example 5:</strong></p>
+<pre><code class="language-py"><div>csp = {
+    <span class="hljs-string">'default-src'</span>: [
+        <span class="hljs-string">'\'self\''</span>,
+        <span class="hljs-string">'*.mailsite.com'</span>
+    ]
+    <span class="hljs-string">'img-src'</span>: <span class="hljs-string">'*'</span>
+}
+</div></code></pre>
+<p>We allow images from all sources, and all other content must come from the
+same origin as your site, or from <code>'*.mailsite.com'</code>.</p>
+<p>How can you <strong>test</strong> your policies? You can set the <code>report_uri=</code> keyword parameter
+when you are initializing <code>Talisman()</code>. The browser, after detecting a <code>Content-Security-Policy</code>
+violation, will <code>POST</code> to the report_uri.</p>
+<p>Let's say our website is hosted at <code>http://example.com/</code>.</p>
+<p>In <code>__init__.py</code>, we setup the CSP and report_uri:</p>
+<pre><code class="language-py"><div>csp = {
+    <span class="hljs-string">'default-src'</span>: [
+        <span class="hljs-string">'\'self\''</span>,
+        <span class="hljs-string">'*.mailsite.com'</span>
+    ]
+    <span class="hljs-string">'img-src'</span>: <span class="hljs-string">'*'</span>
+    <span class="hljs-string">'style-src'</span>: <span class="hljs-string">'cdn.example.com'</span>
+}
+
+Talisman(
+    app, 
+    content_security_policy=csp, 
+    content_security_policy_report_uri=<span class="hljs-string">'https://mywebsite.com/csp_reports'</span>
+)
+</div></code></pre>
+<p>The content security policy is the same as the one in example 5, but with the
+added restriction that stylesheets can only come from <code>'cdn.example.com'</code>. Let's
+say we create a signup HTML page, and it looks roughly like this:</p>
+<p><code>signup.html</code></p>
+<pre><code class="language-html"><div><span class="hljs-meta">&lt;!DOCTYPE html&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>Sign Up<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">"stylesheet"</span> <span class="hljs-attr">href</span>=<span class="hljs-string">"css/style.css"</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
+    ... Content ...
+  <span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span>
+</div></code></pre>
+<p>But, this page violates our CSP. The line <code>&lt;link rel=&quot;stylesheet&quot; href=&quot;css/style.css&quot;&gt;</code>
+tries to load a stylesheet from the same origin as our site, when we specified in the CSP
+that stylesheets can only come from <code>'cdn.example.com'</code>. The browser will send a <code>POST</code>
+request to <code>'https://mywebsite.com/csp_reports'</code>, the report_uri, with a JSON document
+that looks like this:</p>
+<p><strong>CSP violation report:</strong></p>
+<pre><code class="language-json"><div>{
+  <span class="hljs-attr">"csp-report"</span>: {
+    <span class="hljs-attr">"document-uri"</span>: <span class="hljs-string">"http://example.com/signup.html"</span>,
+    <span class="hljs-attr">"referrer"</span>: <span class="hljs-string">""</span>,
+    <span class="hljs-attr">"blocked-uri"</span>: <span class="hljs-string">"http://example.com/css/style.css"</span>,
+    <span class="hljs-attr">"violated-directive"</span>: <span class="hljs-string">"style-src cdn.example.com"</span>,
+    <span class="hljs-attr">"original-policy"</span>: <span class="hljs-string">"default-src 'none'; style-src cdn.example.com; report-uri /_/csp-reports"</span>
+  }
+}
+</div></code></pre>
+<p>Finally, what if we want to configure <code>flask_talisman</code> on a view-by-view basis? Maybe
+we want to allow certain parts of our website to be embeddable, maybe an informational page.
+This would allow other websites to embed our informational page on their website using
+the <code>&lt;iframe&gt;</code>, allowing users of those other websites to see info about our website
+without having to navigate separately to our website.</p>
+<p>To enable embedding on an <code>about()</code> view function, we add the <code>@talisman()</code> decorator,
+specifying <code>frame_option=ALLOW_FROM</code>. Then we also have to specify
+<code>frame_options_allow_from='https://trusteddomain.com/'</code>, and <code>flask_talisman</code> will set
+the corresponding security header to allow <code>'https://trusteddomain.com/'</code> to embed our
+<code>/about</code> page on their website.</p>
+<pre><code class="language-py"><div><span class="hljs-meta">@app.route('/about')</span>
+<span class="hljs-meta">@talisman(frame_options=ALLOW_FROM, frame_options_allow_from='https://trusteddomain.com/')</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">about</span><span class="hljs-params">()</span>:</span>
+    <span class="hljs-keyword">return</span> render_template(<span class="hljs-string">'about.html'</span>)
+</div></code></pre>
+<h3 id="conclusion">Conclusion</h3>
+<p>This lecture was mostly about security headers and how to configure them using
+the <code>flask_talisman</code> API.</p>
+<p>Many of the examples were taken from the MDN CSP documentation; the link to the page is below.</p>
+<p>There are more configuration options:</p>
+<p><img src="file:////Users/lokeshkrishnappa/Developer/stic_courses/CMSC388J-f19/lectures/wk7/images/talisman_config.png" alt="Talisman init_app() source" title="Talisman config options"></p>
+<p>... but you won't be asked to remember how to set them in code. You should
+remember how to create a <code>Content-Security-Policy</code>.</p>
+<p>To understand more about security headers, content security policies, and
+<code>flask_talisman</code>:</p>
+<p><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers">MDN Security Headers Docs</a></p>
+<p><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP">MDN CSP Overview</a></p>
+<p><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy">MDN CSP directives</a></p>
+<p><a href="https://github.com/GoogleCloudPlatform/flask-talisman#talisman-http-security-headers-for-flask">Flask-Talisman README</a></p>
+<p><a href="https://github.com/GoogleCloudPlatform/flask-talisman/blob/master/flask_talisman/talisman.py">Flask-Talisman source code</a></p>
+
+    </body>
+    </html>

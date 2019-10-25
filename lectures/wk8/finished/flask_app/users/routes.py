@@ -1,15 +1,18 @@
-from flask import render_template, url_for, redirect, request
+from flask import render_template, url_for, redirect, request, Blueprint
 from flask_login import login_user, current_user, logout_user, login_required
 
-from flask_app import app, db, bcrypt
+from flask_app import db, bcrypt
 from flask_app.models import User, Post
-from flask_app.forms import RegistrationForm, LoginForm, UpdateForm
+from flask_app.users.forms import RegistrationForm, LoginForm, UpdateForm
 
 
-@app.route("/register", methods=['GET', 'POST'])
+users = Blueprint('users', __name__)
+
+
+@users.route("/register", methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
-        return redirect(url_for('index'))
+        return redirect(url_for('main.index'))
 
     form = RegistrationForm()
     if form.validate_on_submit():
@@ -19,15 +22,15 @@ def register():
         db.session.add(user)
         db.session.commit()
 
-        return redirect(url_for('login'))
+        return redirect(url_for('users.login'))
     
     return render_template('register.html', title='Register', form=form)
 
 
-@app.route("/login", methods=['GET', 'POST'])
+@users.route("/login", methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('index'))
+        return redirect(url_for('main.index'))
 
     form = LoginForm()
     if form.validate_on_submit():
@@ -35,18 +38,18 @@ def login():
 
         if user is not None and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user)
-            return redirect(url_for('account'))
+            return redirect(url_for('users.account'))
 
     return render_template('login.html', title='Login', form=form)
 
 
-@app.route("/logout")
+@users.route("/logout")
 def logout():
     logout_user()
-    return redirect(url_for('index'))
+    return redirect(url_for('main.index'))
 
 
-@app.route("/account", methods=['GET', 'POST'])
+@users.route("/account", methods=['GET', 'POST'])
 @login_required
 def account():
     form = UpdateForm()
@@ -56,26 +59,9 @@ def account():
 
         db.session.commit()
 
-        return redirect(url_for('account'))
+        return redirect(url_for('users.account'))
     
     elif request.method == 'GET':
         form.username.data = current_user.username
     
     return render_template('account.html', title='Account', form=form)
-
-
-@app.route("/user/<username>")
-def user_detail(username):
-    user = User.query.filter_by(username=username).first()
-
-    return render_template('user_detail.html', user=user)
-
-@app.route("/")
-def index():
-    posts = Post.query.all()
-    return render_template('index.html', title='Home', posts=posts)
-
-
-@app.route("/about")
-def about():
-    return render_template('about.html', title='About')

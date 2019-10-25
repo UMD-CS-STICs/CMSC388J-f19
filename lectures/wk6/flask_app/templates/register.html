@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block content %}
+    <div>
+        <h2>Registration</h2>
+    </div>
+    <div>
+        If you already have an account, then just <a href={{ url_for('login') }}>Log In!</a>
+    </div>
+    <!-- Registration Form: -->
+    <div>
+        <form action="" method="post">
+            {{ form.csrf_token }}
+            <div>
+                {{ form.username.label }}
+                {{ form.username }}
+                {% if form.username.errors %}
+                    <div>
+                        {% for error in form.username.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            <div>
+                {{ form.email.label }}
+                {{ form.email }}
+                {% if form.email.errors %}
+                    <div>
+                        {% for error in form.email.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            <div>
+                {{ form.password.label }}
+                {{ form.password }}
+                {% if form.password.errors %}
+                    <div>
+                        {% for error in form.password.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            <div>
+                {{ form.confirm_password.label }}
+                {{ form.confirm_password }}
+                {% if form.confirm_password.errors %}
+                    <div>
+                        {% for error in form.confirm_password.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            <div>
+                {{ form.submit }}
+            </div>
+        </form>
+    </div>
+
+{% endblock %}
