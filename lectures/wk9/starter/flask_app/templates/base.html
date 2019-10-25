@@ -1,0 +1,23 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    {% if title %}
+        <title>{{ title }}</title>
+    {% else %}
+        <title>Flask App</title>
+    {% endif %}
+</head>
+<body>
+    {% if current_user.is_authenticated %}
+    <div>
+        <h3>{{ current_user.username }}'s session</h3>
+    </div>
+    {% endif %}
+    <div>
+        <a href={{ url_for('main.index') }}>Home</a> <a href={{ url_for('main.about') }}>About</a> <a href={{ url_for('users.account') }}>My Account</a>
+    </div>
+    {% block content %}{% endblock %}
+</body>
+</html>

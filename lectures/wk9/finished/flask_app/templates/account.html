@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+    <div>
+        <h2>{{ current_user.username }}</h2>
+        <p>{{ current_user.email }}</p>
+    </div>
+    <div>
+        <form action="" method="post">
+            {{ form.csrf_token }}
+            <div>
+                {{ form.username.label(class="form-control-label") }}
+                {{ form.username(class="form-control form-control-lg") }}
+
+                {% if form.username.errors %}
+                <div class="alert alert-warning" role="alert">
+                    {% for error in form.username.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+            <div>
+                {{ form.submit }}
+            </div>
+        </form>
+    </div>
+    <div>
+        <h3>Your posts:</h3>
+    </div>
+    {% for post in current_user.posts %}
+    <article>
+        <div>
+            <div>
+                You, 
+                <small>on {{ post.date.strftime('%B %d, %Y') }}, posted:</small>
+            </div>
+            <h2>{{ post.title }}</h2>
+            <p>{{ post.content }}</p>
+        </div>
+    </article>
+{% endfor %}
+{% endblock %}
