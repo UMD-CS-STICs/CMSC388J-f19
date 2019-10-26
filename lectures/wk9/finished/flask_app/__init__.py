@@ -4,27 +4,38 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 
-app = Flask(__name__)
-app.config['SECRET_KEY'] = b'0)\x08\xe3\xc9\xc8\x83\xb8\xf1\xda\xdb\xd7\xb3\x0eT\x17'
+csp = {
+    'default-src': [
+        '\'self\'',
+        'https://code.jquery.com/',
+        'https://cdnjs.cloudflare.com/ajax/libs/popper.js/',
+        'https://stackpath.bootstrapcdn.com/bootstrap/'
+    ]
+}
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-talisman = Talisman(app)
-db = SQLAlchemy(app)
-bcrypt = Bcrypt(app)
-login_manager = LoginManager(app)
+talisman = Talisman(content_security_policy=csp)
+db = SQLAlchemy()
+bcrypt = Bcrypt()
+login_manager = LoginManager()
 login_manager.login_view = 'users.login'
 
-from flask_app import models
+def create_app():
+    app = Flask(__name__)
+    app.config['SECRET_KEY'] = b'0)\x08\xe3\xc9\xc8\x83\xb8\xf1\xda\xdb\xd7\xb3\x0eT\x17'
 
-db.create_all()
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# from flask_app import routes
+    talisman.init_app(app)
+    db.init_app(app)
+    bcrypt.init_app(app)
+    login_manager.init_app(app)
 
-from flask_app.main.routes import main
-from flask_app.users.routes import users
+    from flask_app.main.routes import main
+    from flask_app.users.routes import users
 
-app.register_blueprint(main)
-app.register_blueprint(users, url_prefix='/users')
+    app.register_blueprint(main)
+    app.register_blueprint(users)
+
+    return app
 

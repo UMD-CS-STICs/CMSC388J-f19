@@ -10,14 +10,16 @@
         <form action="" method="post">
             {{ form.csrf_token }}
             <div>
-                {{ form.username.label(class="form-control-label") }}
-                {{ form.username(class="form-control form-control-lg") }}
+                {{ form.username.label(class="form-control-label green-text") }}
+                {{ form.username(class="form-control form-control-md") }}
+
                 {% if form.username.errors %}
                 <div class="alert alert-warning" role="alert">
                     {% for error in form.username.errors %}
                         <span>{{ error }}</span>
                     {% endfor %}
                 </div>
+
             {% endif %}
             </div>
             <div>
