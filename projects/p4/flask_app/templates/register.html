@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<div>
+    <h2>Registration</h2>
+</div>
+<div>
+    If you already have an account, then just <a href={{ url_for('users.login') }}>Log In!</a>
+</div>
+<!-- Registration Form: -->
+<div>
+    <form action="" method="post">
+        {#
+            Username, Email, Password, Confirm Password, and Submit fields go here + Bootstrap rendering
+            Check login.html for a smaller example of rendering forms.
+            Also, CSRF token
+        #}
+    </form>
+</div>
+
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block content %}
+<div>
+    <h2>Create Post! - Part 2</h2>
+    <p>Here you'll choose a title and input text or a YouTube video ID</p>
+</div>
+<div>
+    <form action="" method="post">
+        {{ form.csrf_token }}
+        <div>
+            {{ form.title.label(class="form-control-label") }}
+            {{ form.title(class="form-control form-control-md") }}
+
+            {% if form.title.errors %}
+            <div class="alert alert-warning" role="alert">
+                {% for error in form.username.errors %}
+                <span>{{ error }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+        </div>
+        <div>
+            {% if is_video %}
+            {{ form.video_id.label(class="form-control-label") }}
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon3">https://youtu.be/</span>
+                </div>
+                {{ form.video_id(class="form-control", aria_describedby="basic-addon3") }}
+
+                {% if form.video_id.errors %}
+                <div class="alert alert-warning" role="alert">
+                    {% for error in form.video_id.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                {% else %}
+
+                {{ form.text.label(class="form-control-label") }}
+                {{ form.text(class="form-control form-control-md", rows=10) }}
+
+                {% endif %}
+            </div>
+            <div>
+                {{ form.submit(class="form-control form-control-lg") }}
+            </div>
+    </form>
+</div>
+{% endblock %}

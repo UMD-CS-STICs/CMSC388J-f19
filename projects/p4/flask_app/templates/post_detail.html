@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block content %}
+<article class="content-section">
+    <div>
+        <h3>{{ post.title }}</h3>
+
+        {% if post.is_video %}
+
+        <iframe width="560" height="315" src={{ "https://www.youtube.com/embed/%s" % post.content }} frameborder="0"
+            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+        </iframe>
+
+        {% else %}
+
+        <p>{{ post.content }}</p>
+
+        {% endif %}
+
+        <div>
+            <p>
+                <a href={{ url_for('main.user_detail', username=post.author.username) }}>
+                    {{ post.author.username -}}
+                </a> •
+                {{ post.date.strftime('%b %d, %Y at %I:%M %p') }}
+            </p>
+        </div>
+    </div>
+</article>
+<h3>Comments:</h3>
+{% if comments %}
+<div class="list-group">
+    {% for comment in comments %}
+    <div class="list-group-item">
+        <div class="d-flex w-100 justify-content-between">
+            <a href={{ url_for('main.user_detail', username=comment.author.username) }}>
+                <h5 class="mb-1">{{ comment.author.username }}</h5>
+            </a>
+            <small class="text-muted">{{ comment.date.strftime('%b %d, %Y at %I:%M %p') }}</small>
+        </div>
+        <p class="mb-1">{{ comment.content }}</p>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<h5>No comments yet... be the first! (Make sure you're logged in)</h5>
+{% endif %}
+
+<div>
+    <h4>Submit a new comment!</h4>
+    <form action="" method="post">
+        {#
+            The Text and Submit fields should go here + Bootstrap customization
+            To see examples of how to use Bootstrap with forms, look at the wk9 code.
+            And a csrf token
+        #}
+    </form>
+</div>
+
+{% endblock %}

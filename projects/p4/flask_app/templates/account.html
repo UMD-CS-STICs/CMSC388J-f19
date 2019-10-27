@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<div>
+    <h2>{{ current_user.username }}</h2>
+    <p>{{ current_user.email }}</p>
+</div>
+<div>
+    <form action="" method="post">
+        {#
+            Username, Password, and Confirm Password fields go here, from the UpdateForm, plus Bootstrap
+            wk9 has examples of how to use Bootstrap.
+            Plus, csrf token
+        #}
+    </form>
+</div>
+<a href={{ url_for('main.user_detail', username=current_user.username) }}>
+    <h4>Click here to see all of your posts and comments!</h4>
+</a>
+{% endblock %}

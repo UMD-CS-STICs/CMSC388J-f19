@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<div>
+    <h2>Create Post! - Part 1</h2>
+    <p>Here you'll pick the type of post you want to create, and then proceed to step 2 of submitting a post!</p>
+</div>
+<div>
+    <form action="" method="post">
+        {{ form.csrf_token }}
+        <div>
+            {{ form.post_type.label(class="form-control-label") }}
+            {# {{ form.username(class="form-control form-control-md") }} #}
+
+            {{ form.post_type() }}
+
+            {% if form.post_type.errors %}
+            <div class="alert alert-warning" role="alert">
+                {% for error in form.post_type.errors %}
+                <span>{{ error }}</span>
+                {% endfor %}
+            </div>
+
+            {% endif %}
+        </div>
+        <div>
+            {{ form.submit(class="form-control form-control-lg") }}
+        </div>
+    </form>
+</div>
+{% endblock %}
