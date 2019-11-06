@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+    <div>
+        {{ user.username }}'s Posts
+    </div>
+    {% for post in user.posts %}
+    <article>
+        <div>
+            <h2>{{ post.title }}</h2>
+            <div>
+                <small>{{ post.date.strftime('%B %d, %Y') }}</small>
+            </div>
+            <p>{{ post.content }}</p>
+        </div>
+    </article>
+    {% endfor %}
+{% endblock %}
