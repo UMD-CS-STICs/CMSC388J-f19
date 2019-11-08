@@ -76,8 +76,8 @@ can deploy your web app!
 | 10   | Midterm                                  |                                               |
 | 11   | Two-Factor Authentication                | Final Project assigned                        |
 | 12   | Useful Python packages                   |                                               |
-| 13   | THANKSGIVING BREAK                       |                                               |
-| 14   | Deploying your app                       |                                               |
+| 13   | Deploying your app                       |                                               |
+| 14   | THANKSGIVING BREAK                       |                                               |
 | 15   | Presentations                            | Final Project due                             |
 
 ## Grading
