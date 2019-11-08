@@ -65,19 +65,19 @@ can deploy your web app!
 | Week | Topic                                    | Assignment                                    |
 | ---- | ---------------------------------------- | --------------------------------------------- |
 | 1    | Intro to Python                          | Python practice (P1) assigned                 |
-| 2    | Flask Intro                              | P1 due                           |
-| 3    | Intro to Web App Security                | P2 assigned                                  |
-| 4    | Databases, Injection attacks             |                            |
-| 5    | Forms, CSRF                              | P2 due, P3 assigned                          |
-| 6    | User Management                          |                            |
-| 7    | Cookies, MITM, Security Headers, Signals | P3 due, P4 assigned                          |
-| 8    | Blueprints                               | 
-| 9    | Testing                                  | P4 due
+| 2    | Flask Intro                              | P1 due                                        |
+| 3    | Intro to Web App Security                | P2 assigned                                   |
+| 4    | Databases, Injection attacks             |                                               |
+| 5    | Forms, CSRF                              | P2 due, P3 assigned                           |
+| 6    | User Management                          |                                               |
+| 7    | Cookies, MITM, Security Headers, Signals | P3 due                                        |
+| 8    | Blueprints                               |                                               |
+| 9    | Testing                                  | P4 assigned                                   |
 | 10   | Midterm                                  |                                               |
-| 11   | Two-Factor Authentication                | Final Project assigned                        |
+| 11   | Two-Factor Authentication                | P4 due, Final Project assigned                |
 | 12   | Useful Python packages                   |                                               |
-| 13   | THANKSGIVING BREAK                       |                                               |
-| 14   | Deploying your app                       |                                               |
+| 13   | Deploying your app                       |                                               |
+| 14   | THANKSGIVING BREAK                       |                                               |
 | 15   | Presentations                            | Final Project due                             |
 
 ## Grading
