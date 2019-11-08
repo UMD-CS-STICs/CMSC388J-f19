@@ -27,6 +27,19 @@
                 {{ form.password(class="form-control form-control-lg") }}
             </div>
             <div>
+                {{ form.token.label(class="form-control-label green-text") }}
+                {{ form.token(class="form-control form-control-md") }}
+
+                {% if form.token.errors %}
+                <div class="alert alert-warning" role="alert">
+                    {% for error in form.token.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+
+            {% endif %}
+            </div>
+            <div>
                 {{ form.submit(class="form-control form-control-lg") }}
             </div>
         </form>

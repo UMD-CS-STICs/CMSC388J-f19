@@ -1,3 +1,5 @@
+from logging.config import dictConfig
+
 from flask import Flask
 from flask_talisman import Talisman
 from flask_sqlalchemy import SQLAlchemy
@@ -6,12 +8,37 @@ from flask_login import LoginManager
 
 csp = {
     'default-src': [
-        '\'self\'',
+        "'self'",
+    ],
+    'script-src': [
         'https://code.jquery.com/',
         'https://cdnjs.cloudflare.com/ajax/libs/popper.js/',
         'https://stackpath.bootstrapcdn.com/bootstrap/'
-    ]
+    ],
+    'style-src': [
+        "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css", 
+        "'self'"
+    ],
 }
+
+dictConfig(
+    {
+        "version": 1,
+        "formatters": {
+            "default": {
+                "format": "[%(asctime)s] %(levelname)s in %(module)s: %(message)s"
+            }
+        },
+        "handlers": {
+            "wsgi": {
+                "class": "logging.StreamHandler",
+                "stream": "ext://flask.logging.wsgi_errors_stream",
+                "formatter": "default",
+            }
+        },
+        "root": {"level": "INFO", "handlers": ["wsgi"]},
+    }
+)
 
 talisman = Talisman(content_security_policy=csp)
 db = SQLAlchemy()
