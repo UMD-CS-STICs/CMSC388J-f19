@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    {% if message == 'hello' %}
+        <h1>Welcome</h1>
+    {% elif message == 'feed' %}
+        <h1>Le glorious feed</h1>
+    {% else %}
+        <h1>How'd you get here?!?</h1>
+    {% endif %}
+
+    {% block content %}
+    <a href= {{ url_for('feed') }}>Go to Feed</a>
+    {% endblock %}
+</body>
+</html>
