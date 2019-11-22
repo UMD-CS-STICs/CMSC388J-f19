@@ -118,3 +118,15 @@ point to your code's location. In the case of my app, I set the directory to be
 After these changes, click the `Reload` button near the top of the `Web` tab to
 update changes, then navigate to `(https://{your_username}.pythonanywhere.com/)` to
 see your new web app.
+
+### Additionally...
+
+Not required for the final project, but if you'd like to persist data for your web app, SQLite3
+won't do it for you. It's a file-based storage system, and shouldn't be used
+for production applications.
+
+For Heroku, we're provided PostgreSQL. To add this as an additional component for
+your app, run `heroku addons:create heroku-postgresql:hobby-dev`. 
+
+Then modify your configuration with this line: `app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']`, and don't forget to `import os` at the top! This will allow you to
+create a PostgreSQL database on Heroku for persistent data storage.
