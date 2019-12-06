@@ -35,9 +35,15 @@ Next, in `Procfile`, add this text:
 web: gunicorn {app file}:app
 ```
 
+**New Info (12/06/2019)**: If you're using the **application factory** pattern with the 
+`create_app()` function, your `Procfile` should look like this:
+
+```
+web: gunicorn "{app_file}:create_app()"
+```
+
 **Important**: Replace `{app file}` with the name of your Python file (*without* the 
-`.py` extension) that contains your app instance. This will probably be `run` or `app` for most
-people (corresponding to `run.py` and `app.py`, respectively.)
+`.py` extension) that contains your app instance or your `create_app()` function. This will probably be `run` or `app` for most people (corresponding to `run.py` and `app.py`, respectively).
 
 #### GitHub
 
